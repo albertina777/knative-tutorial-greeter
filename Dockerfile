@@ -1,9 +1,19 @@
-FROM registry.fedoraproject.org/fedora-minimal
+FROM registry.access.redhat.com/ubi8/openjdk-17:1.16
 
-WORKDIR /work/
+ENV LANGUAGE='en_US:en'
 
-COPY target/*-runner /work/application
-RUN chmod 775 /work
+
+# We make four distinct layers so if there are application changes the library layers can be re-used
+
+COPY --chown=185 target/lib/ /deployments/lib/
+COPY --chown=185 target/*-runner.jar /deployments/quarkus-run.jar
+
+#COPY --chown=185 target/lib/ /deployments/lib/
+#COPY --chown=185 target/*-runner.jar /deployments/quarkus-run.jar
+
 EXPOSE 8080
+USER 185
+ENV JAVA_OPTS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
