@@ -15,7 +15,7 @@ public class GreetingService {
 
   private final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss");
 
-  private static final String RESPONSE_STRING_FORMAT = "%s %s greeter => '%s' : %d\n";
+  private static final String RESPONSE_STRING_FORMAT = "%s %s greeterrrrr => '%s' : %d\n";
 
   private static final String HOSTNAME =
     parseContainerIdFromHostname(System.getenv().getOrDefault("HOSTNAME", "unknown"));
